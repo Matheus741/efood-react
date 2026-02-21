@@ -1,20 +1,32 @@
-import { createContext, useContext, useState } from 'react'
-import { Product } from '../models/Product'
+import React, { createContext, useState, useContext } from 'react'
 
-type CartContextType = {
-  items: Product[]
-  addItem: (product: Product) => void
-  removeItem: (id: number) => void
-  clearCart: () => void
+export type Dish = {
+  id: number
+  nome: string
+  descricao: string
+  foto: string
+  preco: number
 }
 
-const CartContext = createContext<CartContextType>({} as CartContextType)
+interface CartContextData {
+  items: Dish[]
+  isOpen: boolean
+  addItem: (dish: Dish) => void
+  removeItem: (id: number) => void
+  clearCart: () => void
+  openCart: () => void
+  closeCart: () => void
+}
 
-export const CartProvider = ({ children }: { children: React.ReactNode }) => {
-  const [items, setItems] = useState<Product[]>([])
+const CartContext = createContext<CartContextData>({} as CartContextData)
 
-  const addItem = (product: Product) => {
-    setItems((prev) => [...prev, product])
+export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [items, setItems] = useState<Dish[]>([])
+  const [isOpen, setIsOpen] = useState(false)
+
+  const addItem = (dish: Dish) => {
+    setItems((prev) => [...prev, dish])
+    setIsOpen(true)
   }
 
   const removeItem = (id: number) => {
@@ -23,15 +35,22 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const clearCart = () => {
     setItems([])
+    setIsOpen(false)
   }
+
+  const openCart = () => setIsOpen(true)
+  const closeCart = () => setIsOpen(false)
 
   return (
     <CartContext.Provider
       value={{
         items,
+        isOpen,
         addItem,
         removeItem,
-        clearCart
+        clearCart,
+        openCart,
+        closeCart
       }}
     >
       {children}

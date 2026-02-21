@@ -1,12 +1,10 @@
-import { Container, Title } from './styles'
+import { Container, Logo, Title } from './styles'
+import logo from '../../assets/images/logo.svg'
 
 const Banner = () => (
   <Container>
-    <Title>
-      Viva experiências gastronômicas
-      <br />
-      no conforto da sua casa
-    </Title>
+    <Logo src={logo} alt="efood" />
+    <Title>Viva experiências gastronômicas no conforto da sua casa</Title>
   </Container>
 )
 

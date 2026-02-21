@@ -1,10 +1,10 @@
-import { useMemo, useState, useCallback } from 'react'
-import trashIcon from '../../assets/images/trash.svg'
+import { useState, FormEvent, useEffect } from 'react'
+import { useCart } from '../../context/CartContext'
+import lixeira from '../../assets/images/lixeira.svg'
 
 import {
   Overlay,
   Sidebar,
-  Title,
   Items,
   Item,
   ItemImage,
@@ -12,255 +12,191 @@ import {
   ItemTitle,
   ItemPrice,
   RemoveButton,
-  Footer,
-  Total,
-  Button,
-
+  Title,
+  TotalContainer,
+  PrimaryAction,
   DeliveryForm,
   Field,
-  Label,
-  Input,
   TwoColumns,
   Actions,
-  PrimaryAction,
   SecondaryAction,
-
-  PaymentHeader,
-  PaymentForm,
-  PaymentRow,
   PaymentRowCvv,
-  PaymentActions,
-  PaymentPrimaryButton,
-  PaymentSecondaryButton,
-
-  SuccessTitle,
-  SuccessText,
-  SuccessButton
+  SuccessText
 } from './styles'
-
-import { useCart } from '../../context/CartContext'
 
 type Props = {
   isOpen: boolean
   onClose: () => void
 }
 
-type Step = 'cart' | 'delivery' | 'payment' | 'success'
-
 const Checkout = ({ isOpen, onClose }: Props) => {
   const { items, removeItem, clearCart } = useCart()
+  const [step, setStep] = useState<'cart' | 'delivery' | 'payment' | 'success'>('cart')
 
-  const [step, setStep] = useState<Step>('cart')
-  const [orderId, setOrderId] = useState('')
-
-  const total = useMemo(() => {
-    return items.reduce((sum, item) => sum + item.price, 0)
-  }, [items])
-
-  const generateOrderId = useCallback(() => {
-    return `ORDER_${Date.now()}`
-  }, [])
-
-  const resetAndClose = useCallback(() => {
-    clearCart()
-    setStep('cart')
-    setOrderId('')
-    onClose()
-  }, [clearCart, onClose])
-
-  const goTo = useCallback((next: Step) => {
-    setStep(next)
-  }, [])
+  useEffect(() => {
+    if (!isOpen) {
+      setStep('cart')
+    }
+  }, [isOpen])
 
   if (!isOpen) return null
 
-  const handleFinishPayment = () => {
-    setOrderId(generateOrderId())
-    goTo('success')
+  const totalValue = items.reduce((acc, item) => acc + item.preco, 0)
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(price)
   }
 
-  const renderCart = () => (
-    <>
-      <Title>Carrinho</Title>
+  const handleFinish = (e: FormEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setStep('success')
+  }
 
-      <Items>
-        {items.map((item) => (
-          <Item key={item.id}>
-            <ItemImage src={item.image} alt={item.title} />
-
-            <ItemInfo>
-              <ItemTitle>{item.title}</ItemTitle>
-              <ItemPrice>
-                {item.price.toLocaleString('pt-BR', {
-                  style: 'currency',
-                  currency: 'BRL'
-                })}
-              </ItemPrice>
-            </ItemInfo>
-
-            <RemoveButton type="button" onClick={() => removeItem(item.id)}>
-              <img src={trashIcon} alt="Remover item" />
-            </RemoveButton>
-          </Item>
-        ))}
-      </Items>
-
-      <Footer>
-        <Total>
-          <span>Valor total</span>
-          <span>
-            {total.toLocaleString('pt-BR', {
-              style: 'currency',
-              currency: 'BRL'
-            })}
-          </span>
-        </Total>
-
-        <Button
-          type="button"
-          onClick={() => goTo('delivery')}
-          disabled={items.length === 0}
-        >
-          Continuar com a entrega
-        </Button>
-      </Footer>
-    </>
-  )
-
-  const renderDelivery = () => (
-    <>
-      <Title>Entrega</Title>
-
-      <DeliveryForm>
-        <Field>
-          <Label>Quem irá receber</Label>
-          <Input />
-        </Field>
-
-        <Field>
-          <Label>Endereço</Label>
-          <Input />
-        </Field>
-
-        <Field>
-          <Label>Cidade</Label>
-          <Input />
-        </Field>
-
-        <TwoColumns>
-          <Field>
-            <Label>CEP</Label>
-            <Input />
-          </Field>
-
-          <Field>
-            <Label>Número</Label>
-            <Input />
-          </Field>
-        </TwoColumns>
-
-        <Field>
-          <Label>Complemento (opcional)</Label>
-          <Input />
-        </Field>
-
-        <Actions>
-          <PrimaryAction type="button" onClick={() => goTo('payment')}>
-            Continuar com o pagamento
-          </PrimaryAction>
-
-          <SecondaryAction type="button" onClick={() => goTo('cart')}>
-            Voltar para o carrinho
-          </SecondaryAction>
-        </Actions>
-      </DeliveryForm>
-    </>
-  )
-
-  const renderPayment = () => (
-    <>
-      <Title>Pagamento</Title>
-
-      <PaymentHeader>
-        Pagamento — Valor a pagar{' '}
-        {total.toLocaleString('pt-BR', {
-          style: 'currency',
-          currency: 'BRL'
-        })}
-      </PaymentHeader>
-
-      <PaymentForm>
-        <Field>
-          <Label>Nome no cartão</Label>
-          <Input />
-        </Field>
-
-        <PaymentRowCvv>
-          <Field>
-            <Label>Número do cartão</Label>
-            <Input />
-          </Field>
-
-          <Field>
-            <Label>CVV</Label>
-            <Input />
-          </Field>
-        </PaymentRowCvv>
-
-        <PaymentRow>
-          <Field>
-            <Label>Mês de vencimento</Label>
-            <Input />
-          </Field>
-
-          <Field>
-            <Label>Ano de vencimento</Label>
-            <Input />
-          </Field>
-        </PaymentRow>
-
-        <PaymentActions>
-          <PaymentPrimaryButton type="button" onClick={handleFinishPayment}>
-            Finalizar pagamento
-          </PaymentPrimaryButton>
-
-          <PaymentSecondaryButton
-            type="button"
-            onClick={() => goTo('delivery')}
-          >
-            Voltar para a edição de endereço
-          </PaymentSecondaryButton>
-        </PaymentActions>
-      </PaymentForm>
-    </>
-  )
-
-  const renderSuccess = () => (
-    <>
-      <SuccessTitle>Pedido realizado — ({orderId})</SuccessTitle>
-
-      <SuccessText>
-        Seu pedido já está em preparação e em breve será entregue.
-      </SuccessText>
-
-      <SuccessButton type="button" onClick={resetAndClose}>
-        Concluir
-      </SuccessButton>
-    </>
-  )
+  const handleClose = () => {
+    clearCart()
+    setStep('cart')
+    onClose()
+  }
 
   return (
-    <>
-      <Overlay onClick={resetAndClose} />
-      <Sidebar>
-        {{
-          cart: renderCart(),
-          delivery: renderDelivery(),
-          payment: renderPayment(),
-          success: renderSuccess()
-        }[step]}
+    <Overlay onClick={handleClose}>
+      <Sidebar onClick={(e) => e.stopPropagation()}>
+        {step === 'cart' && (
+          <>
+            <Title>Carrinho</Title>
+            {items.length > 0 ? (
+              <>
+                <Items>
+                  {items.map((item) => (
+                    <Item key={item.id}>
+                      <ItemImage src={item.foto} alt={item.nome} />
+                      <ItemInfo>
+                        <ItemTitle>{item.nome}</ItemTitle>
+                        <ItemPrice>{formatPrice(item.preco)}</ItemPrice>
+                      </ItemInfo>
+                      <RemoveButton type="button" onClick={() => removeItem(item.id)}>
+                        <img src={lixeira} alt="Remover" />
+                      </RemoveButton>
+                    </Item>
+                  ))}
+                </Items>
+                <TotalContainer>
+                  <span>Valor total</span>
+                  <span>{formatPrice(totalValue)}</span>
+                </TotalContainer>
+                <PrimaryAction type="button" onClick={() => setStep('delivery')}>
+                  Continuar com a entrega
+                </PrimaryAction>
+              </>
+            ) : (
+              <div style={{ textAlign: 'center', marginTop: '24px' }}>
+                <SuccessText>Seu carrinho está vazio.</SuccessText>
+              </div>
+            )}
+          </>
+        )}
+
+        {step === 'delivery' && (
+          <>
+            <Title>Entrega</Title>
+            <DeliveryForm onSubmit={(e) => { e.preventDefault(); setStep('payment') }}>
+              <Field>
+                <label htmlFor="receiver">Quem irá receber</label>
+                <input id="receiver" type="text" required />
+              </Field>
+              <Field>
+                <label htmlFor="address">Endereço</label>
+                <input id="address" type="text" required />
+              </Field>
+              <Field>
+                <label htmlFor="city">Cidade</label>
+                <input id="city" type="text" required />
+              </Field>
+              <TwoColumns>
+                <Field>
+                  <label htmlFor="cep">CEP</label>
+                  <input id="cep" type="text" required />
+                </Field>
+                <Field>
+                  <label htmlFor="number">Número</label>
+                  <input id="number" type="text" required />
+                </Field>
+              </TwoColumns>
+              <Field>
+                <label htmlFor="complement">Complemento (opcional)</label>
+                <input id="complement" type="text" />
+              </Field>
+              <Actions>
+                <PrimaryAction type="submit">Continuar com o pagamento</PrimaryAction>
+                <SecondaryAction type="button" onClick={() => setStep('cart')}>
+                  Voltar para o carrinho
+                </SecondaryAction>
+              </Actions>
+            </DeliveryForm>
+          </>
+        )}
+
+        {step === 'payment' && (
+          <>
+            <Title>Pagamento - Valor a pagar {formatPrice(totalValue)}</Title>
+            <DeliveryForm onSubmit={handleFinish}>
+              <Field>
+                <label htmlFor="cardName">Nome no cartão</label>
+                <input id="cardName" type="text" required />
+              </Field>
+              <PaymentRowCvv>
+                <Field>
+                  <label htmlFor="cardNumber">Número do cartão</label>
+                  <input id="cardNumber" type="text" required />
+                </Field>
+                <Field>
+                  <label htmlFor="cvv">CVV</label>
+                  <input id="cvv" type="text" required />
+                </Field>
+              </PaymentRowCvv>
+              <TwoColumns>
+                <Field>
+                  <label htmlFor="expiresMonth">Mês de vencimento</label>
+                  <input id="expiresMonth" type="text" required />
+                </Field>
+                <Field>
+                  <label htmlFor="expiresYear">Ano de vencimento</label>
+                  <input id="expiresYear" type="text" required />
+                </Field>
+              </TwoColumns>
+              <Actions>
+                <PrimaryAction type="submit">Finalizar pagamento</PrimaryAction>
+                <SecondaryAction type="button" onClick={() => setStep('delivery')}>
+                  Voltar para a entrega
+                </SecondaryAction>
+              </Actions>
+            </DeliveryForm>
+          </>
+        )}
+
+        {step === 'success' && (
+          <>
+            <Title>Pedido realizado - ORDER_ID</Title>
+            <SuccessText>
+              Estamos felizes em informar que seu pedido já está em processo de preparação e, em breve, será entregue no endereço fornecido.
+              <br /><br />
+              Gostaríamos de ressaltar que nossos entregadores não estão autorizados a realizar cobranças extras.
+              <br /><br />
+              Lembre-se da importância de higienizar as mãos após o recebimento do seu pedido, garantindo assim sua segurança e bem-estar.
+              <br /><br />
+              Esperamos que desfrute de uma ótima experiência gastronômica. Bom apetite!
+            </SuccessText>
+            <PrimaryAction type="button" onClick={handleClose}>
+              Concluir
+            </PrimaryAction>
+          </>
+        )}
       </Sidebar>
-    </>
+    </Overlay>
   )
 }
 

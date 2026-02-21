@@ -25,7 +25,10 @@ const Home = () => {
               Sushis frescos, sashimis deliciosos e pratos quentes irresistíveis.
               Entrega rápida, embalagens cuidadosas e qualidade garantida.
               Experimente o Japão sem sair do lar com nosso delivery!"
-              image={sushiImg}
+              image={sushiImg}    
+              rating={4.9}
+              badges={['Destaque da semana', 'Japonesa']}
+
             />
           </Link>
 
@@ -36,6 +39,9 @@ const Home = () => {
               Desfrute de massas caseiras, pizzas deliciosas e risotos incríveis, tudo no conforto do seu lar.
               Entrega rápida, pratos bem embalados e sabor inesquecível. Peça já!"
               image={macarraoImg}
+              rating={4.6}
+              badges={['italiana']}
+              
             />
           </Link>
 
@@ -46,6 +52,8 @@ const Home = () => {
               Desfrute de massas caseiras, pizzas deliciosas e risotos incríveis, tudo no conforto do seu lar.
               Entrega rápida, pratos bem embalados e sabor inesquecível. Peça já!"
               image={macarraoImg}
+              rating={4.6}
+              badges={['italiana']}
             />
           </Link>
 
@@ -56,6 +64,8 @@ const Home = () => {
               Desfrute de massas caseiras, pizzas deliciosas e risotos incríveis, tudo no conforto do seu lar.
               Entrega rápida, pratos bem embalados e sabor inesquecível. Peça já!"
               image={macarraoImg}
+              rating={4.6}
+              badges={['italiana']}
             />
           </Link>
 
@@ -66,6 +76,8 @@ const Home = () => {
               Desfrute de massas caseiras, pizzas deliciosas e risotos incríveis, tudo no conforto do seu lar.
               Entrega rápida, pratos bem embalados e sabor inesquecível. Peça já!"
               image={macarraoImg}
+              rating={4.6}
+              badges={['italiana']}
             />
           </Link>
 
@@ -76,6 +88,8 @@ const Home = () => {
               Desfrute de massas caseiras, pizzas deliciosas e risotos incríveis, tudo no conforto do seu lar.
               Entrega rápida, pratos bem embalados e sabor inesquecível. Peça já!"
               image={macarraoImg}
+              rating={4.6}
+              badges={['italiana']}
             />
           </Link>
         </List>

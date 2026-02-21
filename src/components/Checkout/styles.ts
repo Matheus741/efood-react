@@ -1,11 +1,10 @@
 import styled from 'styled-components'
-import { colors } from '../../styles/colors'
 
 export const Overlay = styled.div`
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.7);
-  z-index: 1;
+  z-index: 1000;
 `
 
 export const Sidebar = styled.aside`
@@ -14,47 +13,60 @@ export const Sidebar = styled.aside`
   right: 0;
   width: 360px;
   height: 100vh;
-  background-color: ${colors.primary};
-  padding: 32px 16px;
+  background-color: #E66767;
+  padding: 32px 8px;
   display: flex;
   flex-direction: column;
-  z-index: 2;
+  z-index: 1001;
+  font-family: Roboto, sans-serif;
+  overflow-y: auto;
 `
+
 export const Title = styled.h2`
   font-size: 16px;
   font-weight: 700;
-  color: ${colors.white};
+  color: #FFEBD9;
   margin-bottom: 16px;
 `
-export const Items = styled.div`
-  overflow-y: auto;
+
+export const Items = styled.ul`
+  list-style: none;
 `
-export const Item = styled.div`
-  background-color: ${colors.secondary};
+
+export const Item = styled.li`
+  background-color: #FFEBD9;
   padding: 8px;
   margin-bottom: 16px;
   display: flex;
-  gap: 8px;
   position: relative;
+  width: 344px;
 `
+
 export const ItemImage = styled.img`
   width: 80px;
   height: 80px;
   object-fit: cover;
+  margin-right: 8px;
 `
+
 export const ItemInfo = styled.div`
-  flex: 1;
+  display: flex;
+  flex-direction: column;
 `
+
 export const ItemTitle = styled.h3`
-  font-size: 14px;
-  font-weight: 700;
-  color: ${colors.primary};
-  margin-bottom: 4px;
+  font-size: 18px;
+  font-weight: 900;
+  color: #E66767;
+  margin-bottom: 16px;
 `
+
 export const ItemPrice = styled.span`
   font-size: 14px;
-  color: ${colors.primary};
+  font-weight: 400;
+  color: #E66767;
 `
+
 export const RemoveButton = styled.button`
   position: absolute;
   bottom: 8px;
@@ -62,155 +74,95 @@ export const RemoveButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-
   img {
     width: 16px;
     height: 16px;
   }
 `
-export const Footer = styled.div`
-  background-color: ${colors.primary};
-  padding-top: 16px;
-`
-export const Total = styled.div`
-  font-size: 14px;
-  font-weight: 700;
-  color: ${colors.white};
 
+export const TotalContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 8px;
-`
-export const Button = styled.button`
-  width: 100%;
-  background-color: ${colors.white};
-  color: ${colors.primary};
-  border: none;
-  padding: 8px;
+  width: 344px;
+  color: #FFEBD9;
   font-weight: 700;
-  cursor: pointer;
+  font-size: 14px;
+  margin-top: 24px;
+  margin-bottom: 16px;
 `
 
+export const Button = styled.button`
+  width: 344px;
+  height: 24px;
+  background-color: #FFEBD9;
+  color: #E66767;
+  border: none;
+  font-family: Roboto, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
+export const PrimaryAction = styled(Button)``
+export const SecondaryAction = styled(Button)``
 
 export const DeliveryForm = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding-bottom: 16px;
+  width: 344px;
 `
+
 export const Field = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 4px;
-`
-export const Label = styled.label`
-  font-size: 12px;
-  font-weight: 700;
-  color: ${colors.white};
-`
-export const Input = styled.input`
-  width: 100%;
-  height: 32px;
-  padding: 0 8px;
-  border: none;
-  outline: none;
-  background-color: ${colors.secondary};
-  color: ${colors.primary};
-  font-size: 14px;
+  margin-bottom: 8px;
+
+  label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #FFEBD9;
+    margin-bottom: 8px; 
+  }
+
+  input {
+    width: 100%;
+    height: 32px;
+    padding: 0 8px;
+    border: none;
+    background-color: #FFEBD9;
+    color: #4B4B4B;
+    font-size: 14px;
+    font-weight: 700;
+  }
 `
 
 export const TwoColumns = styled.div`
   display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 8px;
-`
-export const Actions = styled.div`
-  margin-top: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`
-export const PrimaryAction = styled.button`
-  width: 100%;
-  background-color: ${colors.white};
-  color: ${colors.primary};
-  border: none;
-  padding: 8px;
-  font-weight: 700;
-  cursor: pointer;
-`
-export const SecondaryAction = styled.button`
-  width: 100%;
-  background-color: ${colors.white};
-  color: ${colors.primary};
-  border: none;
-  padding: 8px;
-  font-weight: 700;
-  cursor: pointer;
-`
-
-export const PaymentHeader = styled.p`
-  font-size: 14px;
-  font-weight: 700;
-  color: ${colors.white};
-  margin:0 0 12px 0;
-`
-export const PaymentForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`
-export const PaymentRow = styled.div`
-  display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  gap: 34px; 
 `
-export const PaymentRowCvv = styled(PaymentRow)`
-  grid-template-columns: 2fr 1fr;
+
+export const PaymentRowCvv = styled.div`
+  display: grid;
+  grid-template-columns: 228px 87px; 
+  gap: 30px;
 `
-export const PaymentActions = styled.div`
-  margin-top: 8px;
+
+export const Actions = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin-top: 24px;
 `
 
-export const PaymentPrimaryButton = styled.button`
-  width: 100%;
-  background-color: ${colors.white};
-  color: ${colors.primary};
-  border: none;
-  padding: 8px;
-  font-weight: 700;
-  cursor: pointer;
-`
-export const PaymentSecondaryButton = styled.button`
-  width: 100%;
-  background-color: ${colors.white};
-  color: ${colors.primary};
-  border: none;
-  padding: 8px;
-  font-weight: 700;
-  cursor: pointer;
-`
-export const SuccessTitle = styled.h3`
-  font-size: 16px;
-  font-weight: 700;
-  color: ${colors.white};
-  margin-bottom: 16px;
-`
 export const SuccessText = styled.p`
+  color: #FFEBD9;
   font-size: 14px;
   line-height: 22px;
-  color: ${colors.white};
-  margin: 0 0 16px 0;
-`
-export const SuccessButton = styled.button`
-  width: 100%;
-  background-color: ${colors.white};
-  color: ${colors.primary};
-  border: none;
-  padding: 8px;
-  font-weight: 700;
-  cursor: pointer;
+  font-weight: 400;
+  margin-bottom: 24px;
+  width: 344px;
 `
