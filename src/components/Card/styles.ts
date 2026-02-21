@@ -2,12 +2,10 @@ import styled from 'styled-components'
 import { colors } from '../../styles/colors'
 import estrela from '../../assets/images/estrela.svg'
 
-
+// Mantenha suas variáveis
 const CARD_W = 472
 const CARD_H = 398
 const IMG_H = 217
-const STAR_W = 21
-const STAR_H = 21
 
 export const CardContainer = styled.li`
   width: ${CARD_W}px;
@@ -89,8 +87,8 @@ export const RatingValue = styled.span`
 `
 
 export const StarIcon = styled.i`
-  width: ${STAR_W}px;
-  height: ${STAR_H}px;
+  width: 21px;
+  height: 21px;
   background: url(${estrela}) no-repeat center / contain;
   display: inline-block;
 `
