@@ -10,13 +10,13 @@ const Footer = () => {
       <Inner>
         <Logo src={logoImg} alt="efood" />
         <Socials>
-          <a href="#" aria-label="Instagram">
+          <a href="https://www.instagram.com" aria-label="Instagram">
             <SocialIcon src={instagramImg} alt="" />
           </a>
-          <a href="#" aria-label="Facebook">
+          <a href="https://www.facebook.com" aria-label="Facebook">
             <SocialIcon src={facebookImg} alt="" />
           </a>
-          <a href="#" aria-label="Twitter">
+          <a href="https://www.twitter.com" aria-label="Twitter">
             <SocialIcon src={twitterImg} alt="" />
           </a>
         </Socials>
